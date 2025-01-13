@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Data Alumni Siswa</title>
+  <style>
+    /* Reset dasar */
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+    }
+
+    /* Container */
+    .container {
+      max-width: 1200px;
+      margin: 20px auto;
+      padding: 20px;
+      background: #fff;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+    }
+
+    /* Header */
+    h1 {
+      text-align: center;
+      color: #4a148c;
+      margin-bottom: 20px;
+    }
+
+    /* Tabel */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      border: 1px solid #ddd;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    th,
+    td {
+      border: 1px solid #ddd;
+      text-align: center;
+      padding: 10px;
+    }
+
+    th {
+      background-color: #7b1fa2;
+      color: white;
+    }
+
+    tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+
+    tr:hover {
+      background-color: #e1bee7;
+    }
+
+    button {
+      background-color: #7b1fa2;
+      color: white;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #6a1b9a;
+    }
+
+    /* Modal dan Overlay */
+    .overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 999;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      z-index: 1000;
+      max-width: 500px;
+      width: 90%;
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .modal-header h2 {
+      color: #4a148c;
+    }
+
+    .btn-close {
+      background-color: #f44336;
+      color: white;
+      border: none;
+      padding: 8px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 14px;
+      line-height: 1;
+    }
+
+    .btn-close:hover {
+      background-color: #d32f2f;
+    }
+
+    .modal table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+
+    .modal th,
+    .modal td {
+      border: 1px solid #ddd;
+      text-align: center;
+      padding: 8px;
+    }
+
+    .modal th {
+      background-color: #7b1fa2;
+      color: white;
+    }
+
+    .modal-footer {
+      margin-top: 10px;
+      text-align: center;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h1>Data Alumni Siswa</h1>
+    <table id="tabelAlumni">
+      <thead>
+        <tr>
+          <th>No</th>
+          <th>Nama Lengkap</th>
+          <th>Tahun Lulus</th>
+          <th>E-mail</th>
+          <th>Jurusan</th>
+          <th>Hasil Ujian</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Data akan diisi melalui JavaScript -->
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Modal untuk menampilkan hasil ujian -->
+  <div class="overlay" id="overlay"></div>
+  <div class="modal" id="modal">
+    <div class="modal-header">
+      <h2>Hasil Ujian</h2>
+      <button class="btn-close" onclick="closeModal()">X</button>
+    </div>
+    <div id="hasilUjian"></div>
+    <div class="modal-footer">
+      <p id="rataRata"></p>
+    </div>
+  </div>
+
+  <script>
+    // Data Alumni Siswa
+    const alumni = [
+      {
+        nama: "Ali Akbar",
+        tahun: 2019,
+        email: "ali.akbar@gmail.com",
+        jurusan: "IPA",
+        nilai: [
+          { mataPelajaran: "Matematika", nilai: 95 },
+          { mataPelajaran: "Fisika", nilai: 89 },
+          { mataPelajaran: "Kimia", nilai: 92 },
+          { mataPelajaran: "Biologi", nilai: 90 },
+          { mataPelajaran: "Bahasa Indonesia", nilai: 88 },
+          { mataPelajaran: "Bahasa Inggris", nilai: 85 },
+          { mataPelajaran: "Sejarah", nilai: 87 },
+          { mataPelajaran: "Geografi", nilai: 86 },
+          { mataPelajaran: "Ekonomi", nilai: 91 },
+          { mataPelajaran: "Sosiologi", nilai: 89 }
+        ]
+      },
+      {
+        nama: "Budi Santoso",
+        tahun: 2019,
+        email: "budi.santoso@gmail.com",
+        jurusan: "IPS",
+        nilai: [
+          { mataPelajaran: "Matematika", nilai: 80 },
+          { mataPelajaran: "Fisika", nilai: 75 },
+          { mataPelajaran: "Kimia", nilai: 78 },
+          { mataPelajaran: "Biologi", nilai: 76 },
+          { mataPelajaran: "Bahasa Indonesia", nilai: 82 },
+          { mataPelajaran: "Bahasa Inggris", nilai: 81 },
+          { mataPelajaran: "Sejarah", nilai: 84 },
+          { mataPelajaran: "Geografi", nilai: 85 },
+          { mataPelajaran: "Ekonomi", nilai: 87 },
+          { mataPelajaran: "Sosiologi", nilai: 88 }
+        ]
+      },
+      {
+        nama: "Ali Akbar",
+        tahun: 2019,
+        email: "ali.akbar@gmail.com",
+        jurusan: "IPS",
+        nilai: [
+          { mataPelajaran: "Matematika", nilai: 76 },
+          { mataPelajaran: "Fisika", nilai: 80 },
+          { mataPelajaran: "Kimia", nilai: 88 },
+          { mataPelajaran: "Biologi", nilai: 66 },
+          { mataPelajaran: "Bahasa Indonesia", nilai: 82 },
+          { mataPelajaran: "Bahasa Inggris", nilai: 81 },
+          { mataPelajaran: "Sejarah", nilai: 84 },
+          { mataPelajaran: "Geografi", nilai: 85 },
+          { mataPelajaran: "Ekonomi", nilai: 97 },
+          { mataPelajaran: "Sosiologi", nilai: 84 }
+        ]
+      },
+      {
+        nama: "Citra Wulandari",
+        tahun: 2019,
+        email: "citra.wulandari@gmail.com",
+        jurusan: "IPS",
+        nilai: [
+          { mataPelajaran: "Matematika", nilai: 90 },
+          { mataPelajaran: "Fisika", nilai: 85 },
+          { mataPelajaran: "Kimia", nilai: 83 },
+          { mataPelajaran: "Biologi", nilai: 67 },
+          { mataPelajaran: "Bahasa Indonesia", nilai: 82 },
+          { mataPelajaran: "Bahasa Inggris", nilai: 81 },
+          { mataPelajaran: "Sejarah", nilai: 84 },
+          { mataPelajaran: "Geografi", nilai: 93 },
+          { mataPelajaran: "Ekonomi", nilai: 70 },
+          { mataPelajaran: "Sosiologi", nilai: 84 }
+        ]
+      },
+      {
+        nama: "Dian Lestari",
+        tahun: 2019,
+        email: "dian.lestari@gmail.com",
+        jurusan: "Bahasa",
+        nilai: [
+          { mataPelajaran: "Matematika", nilai: 96 },
+          { mataPelajaran: "Fisika", nilai: 80 },
+          { mataPelajaran: "Kimia", nilai: 79 },
+          { mataPelajaran: "Biologi", nilai: 85 },
+          { mataPelajaran: "Bahasa Indonesia", nilai: 82 },
+          { mataPelajaran: "Bahasa Inggris", nilai: 81 },
+          { mataPelajaran: "Sejarah", nilai: 78 },
+          { mataPelajaran: "Geografi", nilai: 85 },
+          { mataPelajaran: "Ekonomi", nilai: 91 },
+          { mataPelajaran: "Sosiologi", nilai: 84 }
+        ]
+      },
+      {
+        nama: "Eka Putri",
+        tahun: 2019,
+        email: "eka.putri@gmail.com",
+        jurusan: "IPS",
+        nilai: [
+          { mataPelajaran: "Matematika", nilai: 62 },
+          { mataPelajaran: "Fisika", nilai: 98 },
+          { mataPelajaran: "Kimia", nilai: 88 },
+          { mataPelajaran: "Biologi", nilai: 67 },
+          { mataPelajaran: "Bahasa Indonesia", nilai: 82 },
+          { mataPelajaran: "Bahasa Inggris", nilai: 81 },
+          { mataPelajaran: "Sejarah", nilai: 84 },
+          { mataPelajaran: "Geografi", nilai: 89 },
+          { mataPelajaran: "Ekonomi", nilai: 97 },
+          { mataPelajaran: "Sosiologi", nilai: 82 }
+        ]
+      },
+      {
+        nama: "Fajar Nugroho",
+        tahun: 2020,
+        email: "fajar.nugroho@gmail.com",
+        jurusan: "Bahasa",
+        nilai: [
+          { mataPelajaran: "Matematika", nilai: 81 },
+          { mataPelajaran: "Fisika", nilai: 65 },
+          { mataPelajaran: "Kimia", nilai: 88 },
+          { mataPelajaran: "Biologi", nilai: 98 },
+          { mataPelajaran: "Bahasa Indonesia", nilai: 82 },
+          { mataPelajaran: "Bahasa Inggris", nilai: 81 },
+          { mataPelajaran: "Sejarah", nilai: 87 },
+          { mataPelajaran: "Geografi", nilai: 85 },
+          { mataPelajaran: "Ekonomi", nilai: 63 },
+          { mataPelajaran: "Sosiologi", nilai: 84 }
+        ]
+      },
+      {
+        nama: "Gita Ramadhani",
+        tahun: 2020,
+        email: "gita.amadhani@gmail.com",
+        jurusan: "IPS",
+        nilai: [
+          { mataPelajaran: "Matematika", nilai: 87 },
+          { mataPelajaran: "Fisika", nilai: 80 },
+          { mataPelajaran: "Kimia", nilai: 88 },
+          { mataPelajaran: "Biologi", nilai: 92 },
+          { mataPelajaran: "Bahasa Indonesia", nilai: 82 },
+          { mataPelajaran: "Bahasa Inggris", nilai: 78 },
+          { mataPelajaran: "Sejarah", nilai: 84 },
+          { mataPelajaran: "Geografi", nilai: 83 },
+          { mataPelajaran: "Ekonomi", nilai: 92 },
+          { mataPelajaran: "Sosiologi", nilai: 65 }
+        ]
+      },
+      {
+        nama: "Hadi Susanto",
+        tahun: 2020,
+        email: "hadi.susanto@gmail.com",
+        jurusan: "IPS",
+        nilai: [
+          { mataPelajaran: "Matematika", nilai: 82 },
+          { mataPelajaran: "Fisika", nilai: 80 },
+          { mataPelajaran: "Kimia", nilai: 88 },
+          { mataPelajaran: "Biologi", nilai: 96 },
+          { mataPelajaran: "Bahasa Indonesia", nilai: 82 },
+          { mataPelajaran: "Bahasa Inggris", nilai: 81 },
+          { mataPelajaran: "Sejarah", nilai: 84 },
+          { mataPelajaran: "Geografi", nilai: 85 },
+          { mataPelajaran: "Ekonomi", nilai: 91 },
+          { mataPelajaran: "Sosiologi", nilai: 84 }
+        ]
+      },
+      {
+        nama: "Indra Pratama",
+        tahun: 2020,
+        email: "indra.pratama@gmail.com",
+        jurusan: "Bahasa",
+        nilai: [
+          { mataPelajaran: "Matematika", nilai: 76 },
+          { mataPelajaran: "Fisika", nilai: 80 },
+          { mataPelajaran: "Kimia", nilai: 88 },
+          { mataPelajaran: "Biologi", nilai: 66 },
+          { mataPelajaran: "Bahasa Indonesia", nilai: 82 },
+          { mataPelajaran: "Bahasa Inggris", nilai: 81 },
+          { mataPelajaran: "Sejarah", nilai: 84 },
+          { mataPelajaran: "Geografi", nilai: 85 },
+          { mataPelajaran: "Ekonomi", nilai: 97 },
+          { mataPelajaran: "Sosiologi", nilai: 84 }
+        ]
+      },
+      {
+        nama: "Joko Widodo",
+        tahun: 2020,
+        email: "joko.widodo@gmail.com",
+        jurusan: "IPS",
+        nilai: [
+          { mataPelajaran: "Matematika", nilai: 76 },
+          { mataPelajaran: "Fisika", nilai: 80 },
+          { mataPelajaran: "Kimia", nilai: 88 },
+          { mataPelajaran: "Biologi", nilai: 66 },
+          { mataPelajaran: "Bahasa Indonesia", nilai: 82 },
+          { mataPelajaran: "Bahasa Inggris", nilai: 81 },
+          { mataPelajaran: "Sejarah", nilai: 84 },
+          { mataPelajaran: "Geografi", nilai: 85 },
+          { mataPelajaran: "Ekonomi", nilai: 97 },
+          { mataPelajaran: "Sosiologi", nilai: 84 }
+        ]
+      },
+      {
+        nama: "Kiki Amalia",
+        tahun: 2020,
+        email: "kiki.amalia@gmail.com",
+        jurusan: "Bahasa",
+        nilai: [
+          { mataPelajaran: "Matematika", nilai: 76 },
+          { mataPelajaran: "Fisika", nilai: 80 },
+          { mataPelajaran: "Kimia", nilai: 88 },
+          { mataPelajaran: "Biologi", nilai: 66 },
+          { mataPelajaran: "Bahasa Indonesia", nilai: 82 },
+          { mataPelajaran: "Bahasa Inggris", nilai: 81 },
+          { mataPelajaran: "Sejarah", nilai: 84 },
+          { mataPelajaran: "Geografi", nilai: 85 },
+          { mataPelajaran: "Ekonomi", nilai: 97 },
+          { mataPelajaran: "Sosiologi", nilai: 84 }
+        ]
+      },
+      {
+        nama: "Lina Kartika",
+        tahun: 2021,
+        email: "lina.kartika@gmail.com",
+        jurusan: "IPA",
+        nilai: [
+          { mataPelajaran: "Matematika", nilai: 76 },
+          { mataPelajaran: "Fisika", nilai: 80 },
+          { mataPelajaran: "Kimia", nilai: 88 },
+          { mataPelajaran: "Biologi", nilai: 66 },
+          { mataPelajaran: "Bahasa Indonesia", nilai: 82 },
+          { mataPelajaran: "Bahasa Inggris", nilai: 81 },
+          { mataPelajaran: "Sejarah", nilai: 84 },
+          { mataPelajaran: "Geografi", nilai: 85 },
+          { mataPelajaran: "Ekonomi", nilai: 97 },
+          { mataPelajaran: "Sosiologi", nilai: 84 }
+        ]
+      },
+      {
+        nama: "Maya Sari",
+        tahun: 2021,
+        email: "maya.sari@gmail.com",
+        jurusan: "IPS",
+        nilai: [
+          { mataPelajaran: "Matematika", nilai: 76 },
+          { mataPelajaran: "Fisika", nilai: 80 },
+          { mataPelajaran: "Kimia", nilai: 88 },
+          { mataPelajaran: "Biologi", nilai: 66 },
+          { mataPelajaran: "Bahasa Indonesia", nilai: 82 },
+          { mataPelajaran: "Bahasa Inggris", nilai: 81 },
+          { mataPelajaran: "Sejarah", nilai: 84 },
+          { mataPelajaran: "Geografi", nilai: 85 },
+          { mataPelajaran: "Ekonomi", nilai: 97 },
+          { mataPelajaran: "Sosiologi", nilai: 84 }
+        ]
+      },
+      {
+        nama: "Nino Andika",
+        tahun: 2021,
+        email: "nino.andika@gmail.com",
+        jurusan: "Bahasa",
+        nilai: [
+          { mataPelajaran: "Matematika", nilai: 76 },
+          { mataPelajaran: "Fisika", nilai: 80 },
+          { mataPelajaran: "Kimia", nilai: 88 },
+          { mataPelajaran: "Biologi", nilai: 66 },
+          { mataPelajaran: "Bahasa Indonesia", nilai: 82 },
+          { mataPelajaran: "Bahasa Inggris", nilai: 81 },
+          { mataPelajaran: "Sejarah", nilai: 84 },
+          { mataPelajaran: "Geografi", nilai: 85 },
+          { mataPelajaran: "Ekonomi", nilai: 97 },
+          { mataPelajaran: "Sosiologi", nilai: 84 }
+        ]
+      },
+      {
+        nama: "Oki Saputra",
+        tahun: 2021,
+        email: "oki.saputrar@gmail.com",
+        jurusan: "Bahasa",
+        nilai: [
+          { mataPelajaran: "Matematika", nilai: 76 },
+          { mataPelajaran: "Fisika", nilai: 80 },
+          { mataPelajaran: "Kimia", nilai: 88 },
+          { mataPelajaran: "Biologi", nilai: 66 },
+          { mataPelajaran: "Bahasa Indonesia", nilai: 82 },
+          { mataPelajaran: "Bahasa Inggris", nilai: 81 },
+          { mataPelajaran: "Sejarah", nilai: 84 },
+          { mataPelajaran: "Geografi", nilai: 85 },
+          { mataPelajaran: "Ekonomi", nilai: 97 },
+          { mataPelajaran: "Sosiologi", nilai: 84 }
+        ]
+      },
+      {
+        nama: "Putri Ayu",
+        tahun: 2021,
+        email: "putri.ayu@gmail.com",
+        jurusan: "IPA",
+        nilai: [
+          { mataPelajaran: "Matematika", nilai: 76 },
+          { mataPelajaran: "Fisika", nilai: 80 },
+          { mataPelajaran: "Kimia", nilai: 88 },
+          { mataPelajaran: "Biologi", nilai: 66 },
+          { mataPelajaran: "Bahasa Indonesia", nilai: 82 },
+          { mataPelajaran: "Bahasa Inggris", nilai: 81 },
+          { mataPelajaran: "Sejarah", nilai: 84 },
+          { mataPelajaran: "Geografi", nilai: 85 },
+          { mataPelajaran: "Ekonomi", nilai: 97 },
+          { mataPelajaran: "Sosiologi", nilai: 84 }
+        ]
+      },
+      {
+        nama: "Qori Rahmat",
+        tahun: 2021,
+        email: "qori.rahmat@gmail.com",
+        jurusan: "Bahasa",
+        nilai: [
+          { mataPelajaran: "Matematika", nilai: 76 },
+          { mataPelajaran: "Fisika", nilai: 80 },
+          { mataPelajaran: "Kimia", nilai: 88 },
+          { mataPelajaran: "Biologi", nilai: 66 },
+          { mataPelajaran: "Bahasa Indonesia", nilai: 82 },
+          { mataPelajaran: "Bahasa Inggris", nilai: 81 },
+          { mataPelajaran: "Sejarah", nilai: 84 },
+          { mataPelajaran: "Geografi", nilai: 85 },
+          { mataPelajaran: "Ekonomi", nilai: 97 },
+          { mataPelajaran: "Sosiologi", nilai: 84 }
+        ]
+      },
+      {
+        nama: "Rina Amelia",
+        tahun: 2021,
+        email: "rina.amelia@gmail.com",
+        jurusan: "IPS",
+        nilai: [
+          { mataPelajaran: "Matematika", nilai: 76 },
+          { mataPelajaran: "Fisika", nilai: 80 },
+          { mataPelajaran: "Kimia", nilai: 88 },
+          { mataPelajaran: "Biologi", nilai: 66 },
+          { mataPelajaran: "Bahasa Indonesia", nilai: 82 },
+          { mataPelajaran: "Bahasa Inggris", nilai: 81 },
+          { mataPelajaran: "Sejarah", nilai: 84 },
+          { mataPelajaran: "Geografi", nilai: 85 },
+          { mataPelajaran: "Ekonomi", nilai: 97 },
+          { mataPelajaran: "Sosiologi", nilai: 84 }
+        ]
+      },
+      {
+        nama: "Satria Dewa",
+        tahun: 2021,
+        email: "satria.dewa@gmail.com",
+        jurusan: "IPA",
+        nilai: [
+          { mataPelajaran: "Matematika", nilai: 76 },
+          { mataPelajaran: "Fisika", nilai: 80 },
+          { mataPelajaran: "Kimia", nilai: 88 },
+          { mataPelajaran: "Biologi", nilai: 66 },
+          { mataPelajaran: "Bahasa Indonesia", nilai: 82 },
+          { mataPelajaran: "Bahasa Inggris", nilai: 81 },
+          { mataPelajaran: "Sejarah", nilai: 84 },
+          { mataPelajaran: "Geografi", nilai: 85 },
+          { mataPelajaran: "Ekonomi", nilai: 97 },
+          { mataPelajaran: "Sosiologi", nilai: 84 }
+        ]
+      },
+      {
+        nama: "Tina Safitrir",
+        tahun: 2021,
+        email: "tina.safitri@gmail.com",
+        jurusan: "IPS",
+        nilai: [
+          { mataPelajaran: "Matematika", nilai: 76 },
+          { mataPelajaran: "Fisika", nilai: 80 },
+          { mataPelajaran: "Kimia", nilai: 88 },
+          { mataPelajaran: "Biologi", nilai: 66 },
+          { mataPelajaran: "Bahasa Indonesia", nilai: 82 },
+          { mataPelajaran: "Bahasa Inggris", nilai: 81 },
+          { mataPelajaran: "Sejarah", nilai: 84 },
+          { mataPelajaran: "Geografi", nilai: 85 },
+          { mataPelajaran: "Ekonomi", nilai: 97 },
+          { mataPelajaran: "Sosiologi", nilai: 84 }
+        ]
+      },
+      {
+        nama: "Ujang Surya",
+        tahun: 2022,
+        email: "ujang.surya@gmail.com",
+        jurusan: "Bahasa",
+        nilai: [
+          { mataPelajaran: "Matematika", nilai: 76 },
+          { mataPelajaran: "Fisika", nilai: 80 },
+          { mataPelajaran: "Kimia", nilai: 88 },
+          { mataPelajaran: "Biologi", nilai: 66 },
+          { mataPelajaran: "Bahasa Indonesia", nilai: 82 },
+          { mataPelajaran: "Bahasa Inggris", nilai: 81 },
+          { mataPelajaran: "Sejarah", nilai: 84 },
+          { mataPelajaran: "Geografi", nilai: 85 },
+          { mataPelajaran: "Ekonomi", nilai: 97 },
+          { mataPelajaran: "Sosiologi", nilai: 84 }
+        ]
+      },
+      {
+        nama: "Vina Permata",
+        tahun: 2022,
+        email: "vina.permata@gmail.com",
+        jurusan: "IPA",
+        nilai: [
+          { mataPelajaran: "Matematika", nilai: 76 },
+          { mataPelajaran: "Fisika", nilai: 80 },
+          { mataPelajaran: "Kimia", nilai: 88 },
+          { mataPelajaran: "Biologi", nilai: 66 },
+          { mataPelajaran: "Bahasa Indonesia", nilai: 82 },
+          { mataPelajaran: "Bahasa Inggris", nilai: 81 },
+          { mataPelajaran: "Sejarah", nilai: 84 },
+          { mataPelajaran: "Geografi", nilai: 85 },
+          { mataPelajaran: "Ekonomi", nilai: 97 },
+          { mataPelajaran: "Sosiologi", nilai: 84 }
+        ]
+      },
+      {
+        nama: "Wahyu Aditya",
+        tahun: 2022,
+        email: "wahyu.aditya@gmail.com",
+        jurusan: "IPS",
+        nilai: [
+          { mataPelajaran: "Matematika", nilai: 76 },
+          { mataPelajaran: "Fisika", nilai: 80 },
+          { mataPelajaran: "Kimia", nilai: 88 },
+          { mataPelajaran: "Biologi", nilai: 66 },
+          { mataPelajaran: "Bahasa Indonesia", nilai: 82 },
+          { mataPelajaran: "Bahasa Inggris", nilai: 81 },
+          { mataPelajaran: "Sejarah", nilai: 84 },
+          { mataPelajaran: "Geografi", nilai: 85 },
+          { mataPelajaran: "Ekonomi", nilai: 97 },
+          { mataPelajaran: "Sosiologi", nilai: 84 }
+        ]
+      },
+      {
+        nama: "Xenia Utami",
+        tahun: 2022,
+        email: "xenia.utami@gmail.com",
+        jurusan: "IPS",
+        nilai: [
+          { mataPelajaran: "Matematika", nilai: 76 },
+          { mataPelajaran: "Fisika", nilai: 80 },
+          { mataPelajaran: "Kimia", nilai: 88 },
+          { mataPelajaran: "Biologi", nilai: 66 },
+          { mataPelajaran: "Bahasa Indonesia", nilai: 82 },
+          { mataPelajaran: "Bahasa Inggris", nilai: 81 },
+          { mataPelajaran: "Sejarah", nilai: 84 },
+          { mataPelajaran: "Geografi", nilai: 85 },
+          { mataPelajaran: "Ekonomi", nilai: 97 },
+          { mataPelajaran: "Sosiologi", nilai: 84 }
+        ]
+      },
+      {
+        nama: "Yani Shekila",
+        tahun: 2022,
+        email: "yani.shekila@gmail.com",
+        jurusan: "IPA",
+        nilai: [
+          { mataPelajaran: "Matematika", nilai: 76 },
+          { mataPelajaran: "Fisika", nilai: 80 },
+          { mataPelajaran: "Kimia", nilai: 88 },
+          { mataPelajaran: "Biologi", nilai: 66 },
+          { mataPelajaran: "Bahasa Indonesia", nilai: 82 },
+          { mataPelajaran: "Bahasa Inggris", nilai: 81 },
+          { mataPelajaran: "Sejarah", nilai: 84 },
+          { mataPelajaran: "Geografi", nilai: 85 },
+          { mataPelajaran: "Ekonomi", nilai: 97 },
+          { mataPelajaran: "Sosiologi", nilai: 84 }
+        ]
+      },
+      {
+        nama: "Yusuf Maulana",
+        tahun: 2022,
+        email: "yusuf.maulana@gmail.com",
+        jurusan: "Bahasa",
+        nilai: [
+          { mataPelajaran: "Matematika", nilai: 76 },
+          { mataPelajaran: "Fisika", nilai: 80 },
+          { mataPelajaran: "Kimia", nilai: 88 },
+          { mataPelajaran: "Biologi", nilai: 66 },
+          { mataPelajaran: "Bahasa Indonesia", nilai: 82 },
+          { mataPelajaran: "Bahasa Inggris", nilai: 81 },
+          { mataPelajaran: "Sejarah", nilai: 84 },
+          { mataPelajaran: "Geografi", nilai: 85 },
+          { mataPelajaran: "Ekonomi", nilai: 97 },
+          { mataPelajaran: "Sosiologi", nilai: 84 }
+        ]
+      },
+      {
+        nama: "Yheira Najwa",
+        tahun: 2022,
+        email: "yheira.najwa@gmail.com",
+        jurusan: "IPA",
+        nilai: [
+          { mataPelajaran: "Matematika", nilai: 76 },
+          { mataPelajaran: "Fisika", nilai: 80 },
+          { mataPelajaran: "Kimia", nilai: 88 },
+          { mataPelajaran: "Biologi", nilai: 66 },
+          { mataPelajaran: "Bahasa Indonesia", nilai: 82 },
+          { mataPelajaran: "Bahasa Inggris", nilai: 81 },
+          { mataPelajaran: "Sejarah", nilai: 84 },
+          { mataPelajaran: "Geografi", nilai: 85 },
+          { mataPelajaran: "Ekonomi", nilai: 97 },
+          { mataPelajaran: "Sosiologi", nilai: 84 }
+        ]
+      },
+      {
+        nama: "Zera Dania",
+        tahun: 2023,
+        email: "sera.dania@gmail.com",
+        jurusan: "Bahasa",
+        nilai: [
+          { mataPelajaran: "Matematika", nilai: 76 },
+          { mataPelajaran: "Fisika", nilai: 80 },
+          { mataPelajaran: "Kimia", nilai: 88 },
+          { mataPelajaran: "Biologi", nilai: 66 },
+          { mataPelajaran: "Bahasa Indonesia", nilai: 82 },
+          { mataPelajaran: "Bahasa Inggris", nilai: 81 },
+          { mataPelajaran: "Sejarah", nilai: 84 },
+          { mataPelajaran: "Geografi", nilai: 85 },
+          { mataPelajaran: "Ekonomi", nilai: 97 },
+          { mataPelajaran: "Sosiologi", nilai: 84 }
+        ]
+      },
+      {
+        nama: "Zahra Shabila",
+        tahun: 2023,
+        email: "zahra.shabila@gmail.com",
+        jurusan: "IPA",
+        nilai: [
+          { mataPelajaran: "Matematika", nilai: 76 },
+          { mataPelajaran: "Fisika", nilai: 80 },
+          { mataPelajaran: "Kimia", nilai: 88 },
+          { mataPelajaran: "Biologi", nilai: 66 },
+          { mataPelajaran: "Bahasa Indonesia", nilai: 82 },
+          { mataPelajaran: "Bahasa Inggris", nilai: 81 },
+          { mataPelajaran: "Sejarah", nilai: 84 },
+          { mataPelajaran: "Geografi", nilai: 85 },
+          { mataPelajaran: "Ekonomi", nilai: 97 },
+          { mataPelajaran: "Sosiologi", nilai: 84 }
+        ]
+      },
+
+    ];
+
+    // Mengisi tabel dengan data alumni
+    const tabelBody = document.querySelector("#tabelAlumni tbody");
+    alumni.forEach((item, index) => {
+      const row = tabelBody.insertRow();
+      row.insertCell().textContent = index + 1; // Nomor
+      row.insertCell().textContent = item.nama; // Nama Lengkap
+      row.insertCell().textContent = item.tahun; // Tahun Lulus
+      row.insertCell().textContent = item.email; // Email
+      row.insertCell().textContent = item.jurusan; // Jurusan
+
+      // Tombol Hasil Ujian
+      const btnCell = row.insertCell();
+      const button = document.createElement("button");
+      button.textContent = "Hasil Ujian";
+      button.onclick = () => showNilai(item.nama, item.nilai);
+      btnCell.appendChild(button);
+    });
+
+    // Menampilkan hasil ujian
+    function showNilai(nama, nilai) {
+      const modal = document.getElementById("modal");
+      const overlay = document.getElementById("overlay");
+      const hasilDiv = document.getElementById("hasilUjian");
+      const rataRataEl = document.getElementById("rataRata");
+
+      let totalNilai = 0;
+      let html = `<p>Nama: ${nama}</p><table><thead><tr><th>Mata Pelajaran</th><th>Nilai</th></tr></thead><tbody>`;
+      nilai.forEach((n) => {
+        html += `<tr><td>${n.mataPelajaran}</td><td>${n.nilai}</td></tr>`;
+        totalNilai += n.nilai;
+      });
+      html += `</tbody></table>`;
+
+      const rataRata = (totalNilai / nilai.length).toFixed(2);
+      rataRataEl.textContent = `Rata-rata Nilai: ${rataRata}`;
+
+      hasilDiv.innerHTML = html;
+      modal.style.display = "block";
+      overlay.style.display = "block";
+    }
+
+    // Menutup modal
+    function closeModal() {
+      document.getElementById("modal").style.display = "none";
+      document.getElementById("overlay").style.display = "none";
+    }
+  </script>
+</body>
+
+</html>

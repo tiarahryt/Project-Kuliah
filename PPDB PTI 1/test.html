@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gambar Berdampingan</title>
+  <style>
+    /* CSS untuk mengatur tata letak gambar */
+    .container {
+      display: flex; /* Menggunakan Flexbox untuk membuat gambar berdampingan */
+      justify-content: space-around; /* Memberi jarak di antara gambar */
+      align-items: flex-start; /* Menyelaraskan item secara vertikal di atas */
+      padding: 20px;
+    }
+
+    .item {
+      text-align: center; /* Teks di tengah bawah gambar */
+      width: 40%; /* Mengatur lebar kolom untuk setiap gambar */
+    }
+
+    .item img {
+      max-width: 100%; /* Gambar menyesuaikan dengan lebar kolom */
+      height: auto; /* Menjaga rasio gambar */
+      border: 2px solid #ccc; /* Border opsional */
+      border-radius: 8px; /* Sudut melengkung opsional */
+    }
+
+    .item p {
+      margin-top: 10px; /* Jarak antara teks dan gambar */
+      font-size: 16px;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+  <!-- Kontainer untuk gambar dan teks -->
+  <div class="container">
+    <!-- Gambar pertama -->
+    <div class="item">
+      <img src="path/to/image1.jpg" alt="Gambar 1">
+      <p>Title Heading<br>Title description, Dec 7, 2017</p>
+    </div>
+
+    <!-- Gambar kedua -->
+    <div class="item">
+      <img src="path/to/image2.jpg" alt="Gambar 2">
+      <p>About Me<br>Some text about me in culpa qui officia deserunt mollit anim.</p>
+    </div>
+  </div>
+</body>
+</html>

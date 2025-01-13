@@ -1,0 +1,68 @@
+*, html, body {
+    margin: 0;
+    padding: 0;
+    font-family: "Roboto" sans-serif;
+}
+
+.fContainer {
+    display: flex;
+    /* justify-content: center;
+    align-items: center; */
+    width: 100%;
+    height: auto;
+    background-color: whitesmoke;
+}
+
+.wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 15px;
+    padding: 15px;
+    width: 100%;
+    height: 40px;
+    background-color: hsl(0, 0%, 100%);
+    box-shadow: 0 7px 15px 0 rgba(0, 0, 0, 0.5);
+}
+
+.brand {
+    display: flex;
+    flex-direction: row;
+    font-size: 1.5em;
+    padding: 15px;
+    text-transform: capitalize;
+}
+
+img {
+    margin-right: 10px;
+}
+
+.firstname {
+    color: rgb(3, 144, 61);
+    font-weight: 700;
+}
+
+.lastname {
+    color: rgb(3, 144, 61);
+    font-weight: 400;
+    padding: 4px;
+}
+
+.navigation {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+
+.navigation > li {
+    list-style-type: none;
+    padding: 15px;
+
+}
+
+.navigation > li > img {
+    width: 70px;
+    height: 70px;
+
+}

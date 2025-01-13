@@ -1,0 +1,76 @@
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: hsl(251, 31%, 53%);
+}
+
+.container {
+    display: flex;
+    padding: 10px;
+    justify-content: center;
+    align-items: center; 
+    width: 15%;
+     /* height: auto; */
+    background-color: hsl(251, 31%, 53%);
+}
+
+.menu {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+}
+
+.menu > li {
+    list-style-type: none;
+    padding: 15px;
+}
+
+.menu > li > a {
+    color: white;
+    font-size: 15px;
+    text-decoration: none;
+    text-transform: capitalize;
+}
+
+.menu > li > a:hover {
+    color: white;
+    transition: all .1s ease-in-out;
+    display: inline-block;
+    padding: 9px 18px;
+    background-color: #7a14ad;
+    text-decoration: none;
+    border-radius: 4px;
+}
+
+.sidebar {
+    width: 200px;
+    background-color: #6a5acd; /* Warna ungu */
+    color: white;
+    padding: 10px;
+    position: fixed;
+    height: 100%;
+  }
+  
+  .sidebar ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .sidebar ul li {
+    margin: 10px 0;
+  }
+  
+  .sidebar ul li a {
+    color: white;
+    text-decoration: none;
+    display: block;
+    padding: 8px;
+    border-radius: 4px;
+  }
+  
+  .sidebar ul li a:hover {
+    background-color: #4b0082; /* Warna hover */
+  }
+  

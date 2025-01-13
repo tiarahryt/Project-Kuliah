@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Calon PPDB</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 800px;
+            background: #fff;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 50px auto;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .header {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        input,
+        select,
+        button {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+
+        button {
+            background-color: #6a11cb;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #520da6;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        table,
+        th,
+        td {
+            border: 1px solid #ddd;
+        }
+
+        th {
+            background: #6a11cb;
+            color: white;
+            text-align: center;
+            padding: 10px;
+        }
+
+        td {
+            padding: 10px;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container" id="formContainer">
+        <div class="header">Silahkan Login</div>
+        <form id="daftarForm">
+            <label for="nama">Nama Lengkap:</label>
+            <input type="text" id="nama" name="nama" placeholder="Masukkan nama lengkap Anda" required>
+
+            <label for="nis">NIS:</label>
+            <input type="number" id="nis" name="nis" placeholder="Masukkan NIS Anda" required>
+
+            <label for="email">E-mail:</label>
+            <input type="email" id="email" name="email" placeholder="Masukkan email Anda" required>
+
+            <label for="jurusan">Pilih Jurusan:</label>
+            <select id="jurusan" name="jurusan" required>
+                <option value="" disabled selected>-- Pilih Jurusan Anda --</option>
+                <option value="IPA">IPA</option>
+                <option value="IPS">IPS</option>
+                <option value="Bahasa">Bahasa</option>
+            </select>
+
+            <button type="submit">Login</button>
+        </form>
+    </div>
+
+    <div class="container" id="tabelContainer" style="display: none;">
+        <div class="header">Data PPDB Calon Peserta Didik</div>
+        <table id="siswaTable">
+            <thead>
+                <tr>
+                    <th>No</th>
+                    <th>Nama Lengkap</th>
+                    <th>NIS</th>
+                    <th>E-mail</th>
+                    <th>Jurusan</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Data siswa akan diisi secara dinamis -->
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        // Ambil elemen
+        const daftarForm = document.getElementById('daftarForm');
+        const formContainer = document.getElementById('formContainer');
+        const tabelContainer = document.getElementById('tabelContainer');
+        const siswaTableBody = document.querySelector('#siswaTable tbody');
+
+        // Data awal siswa
+        const siswaData = [
+            { nama: "Ali", nis: "1001", email: "ali@gmail.com", jurusan: "IPA" },
+            { nama: "Budi", nis: "1002", email: "budi@gmail.com", jurusan: "IPS" },
+            { nama: "Citra", nis: "1003", email: "citra@gmail.com", jurusan: "Bahasa" },
+            { nama: "Dian", nis: "1004", email: "dian@gmail.com", jurusan: "IPA" },
+            { nama: "Eka", nis: "1005", email: "eka@gmail.com", jurusan: "IPS" },
+            { nama: "Fajar", nis: "1006", email: "fajar@gmail.com", jurusan: "Bahasa" },
+            { nama: "Gita", nis: "1007", email: "gita@gmail.com", jurusan: "IPA" },
+            { nama: "Hadi", nis: "1008", email: "hadi@gmail.com", jurusan: "IPS" },
+            { nama: "Indra", nis: "1009", email: "indra@gmail.com", jurusan: "Bahasa" },
+            { nama: "Joko", nis: "1010", email: "joko@gmaill.com", jurusan: "IPA" },
+            { nama: "Kiki", nis: "1011", email: "kiki@gmail.com", jurusan: "IPS" },
+            { nama: "Lina", nis: "1012", email: "lina@gmail.com", jurusan: "Bahasa" },
+            { nama: "Maya", nis: "1013", email: "maya@gmail.com", jurusan: "IPA" },
+            { nama: "Nino", nis: "1014", email: "nino@gmail.com", jurusan: "IPS" },
+            { nama: "Oki", nis: "1015", email: "oki@gmail.com", jurusan: "Bahasa" },
+        ];
+
+        // Fungsi untuk menampilkan tabel
+        function tampilkanTabelSiswa() {
+            // Hapus semua data lama di tabel
+            siswaTableBody.innerHTML = '';
+
+            // Tambahkan data siswa ke tabel
+            siswaData.forEach((siswa, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+          <td>${index + 1}</td>
+          <td>${siswa.nama}</td>
+          <td>${siswa.nis}</td>
+          <td>${siswa.email}</td>
+          <td>${siswa.jurusan}</td>
+        `;
+                siswaTableBody.appendChild(row);
+            });
+        }
+
+        // Tampilkan data awal
+        tampilkanTabelSiswa();
+
+        // Event listener untuk form submit
+        daftarForm.addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            // Ambil data dari form
+            const nama = document.getElementById('nama').value;
+            const nis = document.getElementById('nis').value;
+            const email = document.getElementById('email').value;
+            const jurusan = document.getElementById('jurusan').value;
+
+            // Simpan data baru ke array
+            siswaData.push({ nama, nis, email, jurusan });
+
+            // Tampilkan tabel
+            tampilkanTabelSiswa();
+
+            // Sembunyikan form dan tampilkan tabel
+            formContainer.style.display = 'none';
+            tabelContainer.style.display = 'block';
+        });
+    </script>
+</body>
+
+</html>
