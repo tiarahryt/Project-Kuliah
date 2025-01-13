@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Toko Boneka</title>
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap"
+    rel="stylesheet" />
+
+  <!-- Father Icons -->
+  <script src="https://unpkg.com/feather-icons"></script>
+
+  <!-- My style -->
+  <link rel="stylesheet" href="css/style.css" />
+
+  <!-- Alpine Js -->
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <!-- app -->
+  <script src="src/app.js" async></script>
+</head>
+
+<body>
+  <!-- Navbar Start -->
+  <nav class="navbar" x-data>
+    <a href="#" class="navbar-logo">Toko<span>Boneka</span></a>
+    <div class="navbar-nav">
+      <a href="#home">Beranda</a>
+      <a href="#about">Tentang Kami</a>
+      <a href="#menu">Stok Toko</a>
+      <a href="#contact">Kontak</a>
+    </div>
+
+    <div class="navbar-extra">
+      <a href="#" id="search-button"><i data-feather="search"></i></a>
+      <a href="#" id="shopping-cart-button"><i data-feather="shopping-cart"></i>
+        <span class="quantity-badge" x-show="$store.cart.quantity" x-text="$store.cart.quantity"></span>
+      </a>
+      <a href="#" id="boneka-menu"><i data-feather="menu"></i></a>
+    </div>
+
+    <!-- Search Form start -->
+    <div class="search-form">
+      <input type="search" id="search-box" placeholder="Masukan jenis boneka.." />
+      <label for="search-box"><i data-feather="search"></i></label>
+    </div>
+    <!-- Search Form end -->
+
+    <!-- Shopping Cart start -->
+    <div class="shopping-cart">
+      <template x-for="(item, index) in $store.cart.items" x-keys="index">
+        <div class="cart-item">
+          <img :src="`img/products/${item.img}`" :alt="item.name" />
+          <div class="item-detail">
+            <h3 x-text="item.name"></h3>
+            <div class="item-price">
+              <span x-text="rupiah(item.price)"></span> &times;
+              <button id="remove" @click="$store.cart.remove(item.id)">
+                &minus;
+              </button>
+              <span x-text="item.quantity"></span>
+              <button id="add" @click="$store.cart.add(item)">&plus;</button>&equals;
+              <span x-text="rupiah(item.total)"></span>
+            </div>
+          </div>
+        </div>
+      </template>
+      <h4 x-show="!$store.cart.items.length" style="margin-top: 1rem">
+        Belanjaan Anda
+      </h4>
+      <h4 x-show="$store.cart.items.length">
+        Total : <span x-text="rupiah($store.cart.total)"></span>
+      </h4>
+
+      <div class="form-container" x-show="$store.cart.items.length">
+        <form action="" id="checkoutForm">
+          <input type="hidden" name="items" x-model="JSON.stringify($store.cart.items)" autocomplete="off" />
+          <input type="hidden" name="total" x-model="$store.cart.total" autocomplete="off" />
+          <h5>Costomer Detail</h5>
+
+          <label for="name">
+            <span>Nama</span>
+            <input type="text" name="name" id="name" />
+          </label>
+
+          <label for="email">
+            <span>E-mail</span>
+            <input type="email" name="email" id="email" />
+          </label>
+
+          <label for="phone">
+            <span>No. telp</span>
+            <input type="number" name="phone" id="phone" autocomplete="off" />
+          </label>
+
+          <button class="checkout-button disabled" type="submit" id="checkout-button" value="checkoout">
+            Check-out
+          </button>
+        </form>
+      </div>
+    </div>
+    <!-- Shopping Cart end -->
+  </nav>
+
+  <!-- Navbar End -->
+
+  <!-- Hero Section Start -->
+  <section class="hero" id="beranda">
+    <main class="content">
+      <h1>
+        <span>Hanya Di Toko Kami !!!</span> Boneka Unik Dengan Bahan Tercantik
+      </h1>
+      <p>Tersedia berbagai model boneka unik untuk di koleksi.</p>
+      <a href="#products" class="cta">Beli Sekarang</a>
+    </main>
+  </section>
+  <!-- Hero Section End -->
+
+  <!-- about section start -->
+  <section id="about" class="about">
+    <h2><span>Tentang</span>Kami</h2>
+
+    <div class="row">
+      <div class="about-img">
+        <img src="img/boneka-kami.webp" alt="Tentang-kami" />
+      </div>
+      <div class="content">
+        <h3>Kualitas boneka yang terjamin</h3>
+        <p>
+          Kami memastikan setiap model boneka yang kami jual memiliki kualitas bahan
+          ternyaman. Mulai dari proses pemilihan, perajutan, hingga pengiriman,
+          kami memperhatikan setiap detail bahan dengan bijak. Sehingga setiap
+          konsumen mendapatkan kepuasan dengan berbelanja di TokoBoneka Kami.
+        </p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="about-img">
+        <img src="img/boneka-kami1.jpeg" alt="Tentang-kami" />
+      </div>
+      <div class="content">
+        <h3>1. Pemilihan Bahan Ramah Lingkungan</h3>
+        <p>
+          Boneka kami menggunakan bahan yang ramah lingkungan, seperti kain organik dan serat daur ulang, untuk
+          mendukung
+          kelestarian alam.
+        </p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="about-img">
+        <img src="img/boneka-kamii2.jpg" alt="Tentang-kami" />
+      </div>
+      <div class="content">
+        <h3>2. Inovasi dalam Desain</h3>
+        <p>
+          Setiap boneka dirancang dengan sentuhan unik, memastikan bahwa setiap produk memiliki karakter yang istimewa.
+        </p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="about-img">
+        <img src="img/boneka-kami3.jpeg" alt="Tentang-kami" />
+      </div>
+      <div class="content">
+        <h3>3. Kenyamanan Maksimal</h3>
+        <p>
+          Bahan yang kami pilih, seperti kapas super lembut dan wol premium, memberikan tekstur halus dan nyaman saat
+          disentuh.
+        </p>
+      </div>
+    </div>
+  </section>
+  <!-- about section end -->
+
+  <!-- Menu section start -->
+
+  <section id="menu" class="menu">
+    <h2><span>Stok</span> Toko</h2>
+    <p>
+      Kami selalu memastikan bahwa stok boneka kami selalu terjaga untuk
+      memenuhi kebutuhan Anda.
+    </p>
+
+    <div class="row">
+      <div class="menu-card">
+        <img src="img/menu/beruang.webp" alt="Boneka Beruang" class="menu-card-img" />
+        <h3 class="menu-card-title">- Boneka Beruang -</h3>
+        <p class="menu-card-price">IDR 78K</p>
+      </div>
+      <div class="menu-card">
+        <img src="img/menu/labubu.jpeg" alt="Boneka Labubu" class="menu-card-img" />
+        <h3 class="menu-card-title">- Boneka Labubu -</h3>
+        <p class="menu-card-price">IDR 82K</p>
+      </div>
+      <div class="menu-card">
+        <img src="img/menu/boba.jpeg" alt="Boneka Boba" class="menu-card-img" />
+        <h3 class="menu-card-title">- Boneka Boba -</h3>
+        <p class="menu-card-price">IDR 65K</p>
+      </div>
+      <div class="menu-card">
+        <img src="img/menu/lotso.jpeg" alt="Boneka Lotso" class="menu-card-img" />
+        <h3 class="menu-card-title">- Boneka Lotso -</h3>
+        <p class="menu-card-price">IDR 99K</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Menu section end -->
+
+  <!-- Contact section start -->
+  <section id="contact" class="contact">
+    <h2><span>Kontak</span> Kami</h2>
+    <p>
+      Jika Anda masih ragu untuk melakukan pemesanan Online, Silahkan Masukan
+      Nama, E-mail, dan No. telp Anda supaya memudahkan kami untuk menghubungi
+      anda, jika anda mempunyai pertanyaan terkait pemesanan online dan
+      informasi lebih lanjut. Jika ingin membeli langsung di tempat kami, anda
+      bisa melihat peta untuk menemukan Toko kami, Terima Kasih.
+    </p>
+
+    <div class="row">
+      <iframe
+        src="
+        https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d63465.76625188552!2d106.57637876153092!3d-6.182868513878456!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e69ff28011046cb%3A0xa141f9bf9721eb1e!2sKec.%20Karawaci%2C%20Kota%20Tangerang%2C%20Banten!5e0!3m2!1sid!2sid!4v1734416222391!5m2!1sid!2sid"
+        width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade"></iframe>"
+
+      <form id="contact-form">
+        <div class="input-group">
+          <i data-feather="user"></i>
+          <input type="text" id="name" placeholder="Nama" required />
+        </div>
+        <div class="input-group">
+          <i data-feather="mail"></i>
+          <input type="email" id="email" placeholder="E-mail" required />
+        </div>
+        <div class="input-group">
+          <i data-feather="phone"></i>
+          <input type="text" id="phone" placeholder="No. telp" required />
+        </div>
+        <button type="submit" class="btn">Kirim Pesan</button>
+      </form>
+    </div>
+  </section>
+  <!-- Contact section end -->
+
+  <!-- footer Start -->
+  <footer>
+    <div class="socials">
+      <a href="https://www.instagram.com/tiarazht.ra/" target="_blank"><i data-feather="instagram"></i></a>
+      <a href="https://www.linkedin.com/in/tiarahryt/" target="_blank"><i data-feather="linkedin"></i></a>
+      <a href="https://github.com/tiarahryt" target="_blank"><i data-feather="github"></i></a>
+    </div>
+    <div class="links">
+      <a href="#home">Beranda</a>
+      <a href="#about">Tentang Kami</a>
+      <a href="#menu">Stok Toko</a>
+      <a href="#contact">Kontak</a>
+    </div>
+    <div class="credit">
+      <p>Created by <a href="">Tiarahryt</a>. | &copy; 2024.</p>
+    </div>
+  </footer>
+  <!-- footer end -->
+
+  <!-- Modal Box Item Detail For Start Boneka Sirip Kuning -->
+  <div class="modal" id="item-detail-modal">
+    <div class="modal-container">
+      <a href="#" class="close-icon"><i data-feather="x"></i></a>
+      <div class="modal-content">
+        <img src="img/products/3.jpeg" alt="product 3" />
+        <div class="product-content">
+          <h3>Produk 3</h3>
+          <p>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Magni
+            commodi ex distinctio id adipisci excepturi odit minus natus
+            praesentium, perferendis autem dignissimos. Saepe, rem iure!
+          </p>
+          <div class="product-stars">
+            <i data-feather="star" class="star-full"></i>
+            <i data-feather="star" class="star-full"></i>
+            <i data-feather="star" class="star-full"></i>
+            <i data-feather="star" class="star-full"></i>
+            <i data-feather="star"></i>
+          </div>
+          <div class="product-price">IDR 125K <span>IDR 125K</span></div>
+          <a href="#"><i data-feather="shopping-cart"></i><span>Add to cart</span></a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Modal Box Item Detail End For Ikan Tuna Sirip Kuning -->
+
+  <!-- Father Icons -->
+  <script>
+    feather.replace();
+  </script>
+
+  <!-- My Javascript -->
+  <script src="js/script.js"></script>
+</body>
+
+</html>
